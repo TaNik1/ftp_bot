@@ -29,7 +29,7 @@ def get_json(path) -> str:
 
 
 async def check_updates() -> None:
-    ftp = FTP(host="host", user="username", passwd="password")
+    ftp = FTP(host="82.202.173.230", user="mainparser", passwd="oD5zA2bJ7x")
     ftp.cwd(f"www/parser-poiskzip.ru")
     for name_parser in parsers:
         ftp.cwd(name_parser)
