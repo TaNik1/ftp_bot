@@ -4,8 +4,7 @@ from aiogram.utils.exceptions import BadRequest
 from .bot import dp
 from .message import *
 from .keyboard import pagination_cb, parsers, get_pagination_keyboard
-from utils.ftp_tasks import get_json
-from io import BytesIO
+from utils.ftp_tasks import get_json, check_updates
 from DataBase.models import User
 
 
@@ -14,6 +13,11 @@ async def send_welcome(message: types.Message):
     User.get_or_create(tg_id=message.from_user.id)
     await bot.send_message(message.from_user.id, "Результаты",
                            reply_markup=get_pagination_keyboard(1, (len(parsers) - 1) // 4 + 1))
+
+
+@dp.message_handler(commands=['check'])
+async def send_check_updates(message: types.Message):
+    await check_updates()
 
 
 @dp.callback_query_handler(pagination_cb.filter())
