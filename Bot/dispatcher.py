@@ -39,7 +39,7 @@ async def handle_pagination_callback(call: types.CallbackQuery, callback_data: d
 async def send_parser_info(call: types.CallbackQuery):
     try:
         file_name = get_json(call.data)
-        await bot.send_document(chat_id=call.from_user.id, document=f"https://parser-poiskzip.ru/{file_name}")
+        await bot.send_message(call.from_user.id, f"https://parser-poiskzip.ru/{call.data}/{file_name}")
     except IndexError:
         await bot.send_message(call.from_user.id, f"Файла {call.data[7:]}.json не существует")
     await call.answer()
