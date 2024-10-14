@@ -17,7 +17,7 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=['check'])
 async def send_check_updates(message: types.Message):
-    await check_updates()
+    await check_updates(False, message.from_user.id)
 
 
 @dp.callback_query_handler(pagination_cb.filter())

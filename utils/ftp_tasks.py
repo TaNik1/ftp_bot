@@ -4,6 +4,7 @@ import datetime as dt
 from pytz import timezone
 from Bot.keyboard import parsers
 from Bot.message import send_notification
+from Bot.bot import bot
 
 
 def get_parsers() -> List[str]:
@@ -28,7 +29,7 @@ def get_json(path) -> str:
     return file_name
 
 
-async def check_updates() -> None:
+async def check_updates(all_users: bool = True, user_id: int = None) -> None:
     ftp = FTP(host="82.202.173.230", user="mainparser", passwd="oD5zA2bJ7x")
     ftp.cwd(f"www/parser-poiskzip.ru")
     for name_parser in parsers:
@@ -42,7 +43,10 @@ async def check_updates() -> None:
                                   hour=int(fact['modify'][4:][4:6]), minute=int(fact['modify'][4:][6:8]))
         moscow_tz = timezone("Europe/Moscow")
         file_modify = moscow_tz.localize(file_modify)
-        if dt.datetime.now(tz=moscow_tz) - file_modify >= dt.timedelta(days=1):
-            await send_notification(name_parser)
+        if dt.datetime.now(tz=moscow_tz) - file_modify >= dt.timedelta(days=1, hours=3):
+            if all_users:
+                await send_notification(name_parser)
+            else:
+                await bot.send_message(user_id, f"{name_parser} не обновил товары")
         ftp.cwd("..")
     ftp.quit()
